@@ -1,5 +1,7 @@
 use raylib::prelude::*;
 
+mod chip_8;
+
 const WIDTH : i32 = 64;
 const HEIGTH : i32 = 32;
 
@@ -14,9 +16,17 @@ fn main()
         .title("chip 8 rs")
         .build();
 
+    let mut ch_8 = chip_8::init_ch8(); //Init the chip8
+    ch_8.store_font(); //Store the custom font in the memory
+
     while !rl.window_should_close() {
         let mut d = rl.begin_drawing(&thread);
 
+        //EMULATE
+
+        //DRAW
         d.clear_background(Color::WHITE);
+
+        //Get Key press
     }
 }

@@ -26,6 +26,7 @@ fn main()
         let mut d = rl.begin_drawing(&thread);
 
         //EMULATE
+        ch_8.emulate();
 
         //DRAW
         d.clear_background(Color::WHITE);

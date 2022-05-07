@@ -79,4 +79,16 @@ impl Chip8
             self.memory[i + 512] = buffer[i];
         }
     }
+
+    pub fn emulate(&mut self)
+    {
+        //Fetch
+        self.opcode = (self.memory[self.pc as usize] as u16) << 8 | (self.memory[(self.pc+1) as usize] as u16);
+        self.pc = self.pc + 2;
+        
+        //Decode
+
+        //Update
+
+    }
 }

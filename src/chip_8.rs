@@ -1,4 +1,7 @@
 //Imports
+use std::fs::*;
+use std::fs::File;
+use std::io::Read;
 
 //Font sprites
 const CH8_FONT : [u8; 80] = [
@@ -61,6 +64,19 @@ impl Chip8
         for i in 0..80 
         {
             self.memory[i] = CH8_FONT[i]; //Load the font in the memory
+        }
+    }
+
+    pub fn load_rom(&mut self, rom_name : &str)
+    {
+        let mut f = File::open(&rom_name).expect("no file found");
+        let metadata = metadata(&rom_name).expect("unable to read metadata");
+        let mut buffer = vec![0; metadata.len() as usize];
+        f.read(&mut buffer).expect("buffer overflow");
+
+        for i in 0..buffer.len() 
+        {
+            self.memory[i + 512] = buffer[i];
         }
     }
 }

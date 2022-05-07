@@ -17,7 +17,10 @@ fn main()
         .build();
 
     let mut ch_8 = chip_8::init_ch8(); //Init the chip8
+    
     ch_8.store_font(); //Store the custom font in the memory
+
+    ch_8.load_rom("roms/pong.ch8");
 
     while !rl.window_should_close() {
         let mut d = rl.begin_drawing(&thread);

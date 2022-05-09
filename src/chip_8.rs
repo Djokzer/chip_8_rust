@@ -37,6 +37,7 @@ pub struct Chip8
     pub opcode : u16,           //Opcode are two bytes long (Big ENDIAN)
     pub index_reg : u16,        //Index register
     pub pc : u16,               //Program counter
+    pub draw_flag : bool,       //Flag for drawing
 }
 
 pub fn init_ch8()->Chip8
@@ -54,6 +55,7 @@ pub fn init_ch8()->Chip8
         opcode : 0,
         index_reg : 0,
         pc : 0x200, // Program counter starts at 0x200
+        draw_flag : false,
     }
 }
 
@@ -83,12 +85,61 @@ impl Chip8
     pub fn emulate(&mut self)
     {
         //Fetch
-        self.opcode = (self.memory[self.pc as usize] as u16) << 8 | (self.memory[(self.pc+1) as usize] as u16);
+        self.opcode = (self.memory[self.pc as usize] as u16) << 8 | (self.memory[(self.pc+1) as usize] as u16); 
         self.pc = self.pc + 2;
         
         //Decode
+        let op = self.opcode & 0xF000 >> 12; 
+        let x = self.opcode & 0x0F00 >> 8;
+        let y = self.opcode & 0x00F0 >> 4;
+        let n = self.opcode & 0x000F >> 0;
+        let nn = self.opcode & 0x00FF;
+        let nnn = self.opcode & 0x0FFF;
 
-        //Update
+        match op
+        {
+            0x0 => 
+            {
+                //Clear Screen
+                self.draw_flag = true;
+                self.clear_display();
+            }
+            0x1 =>
+            {   
+                //Jump
+                self.pc = nnn;
+            }
+            0x6 =>
+            {
+                //Set register vx
+                self.v[x as usize] = nn as u8;
+            }
+            0x7 =>
+            {
+                //Add value to registe vx
+                self.v[x as usize] += nn as u8;
+            }
+            0xA =>
+            {
+                //Set the index register to NNN
+                self.index_reg = nnn;
+            }
+            0xD =>
+            {
+                //Draw in the display
+                let x_pos = self.v[x as usize] % 64;    //Get x coordinate
+                let y_pos = self.v[y as usize] % 32;    //Get y coordinate
+                self.v[15] = 0;                         //Clear Register v[f]
+            }
+            _ => println!("Unknown OPCODE {}", self.opcode),
+        }
+    }
 
+    pub fn clear_display(&mut self)
+    {
+        for i in 0..self.display.len() 
+        {
+            self.display[i] = 0;
+        }
     }
 }

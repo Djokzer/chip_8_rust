@@ -37,7 +37,6 @@ pub struct Chip8
     pub opcode : u16,           //Opcode are two bytes long (Big ENDIAN)
     pub index_reg : u16,        //Index register
     pub pc : u16,               //Program counter
-    pub draw_flag : bool,       //Flag for drawing
 }
 
 pub fn init_ch8()->Chip8
@@ -55,7 +54,6 @@ pub fn init_ch8()->Chip8
         opcode : 0,
         index_reg : 0,
         pc : 0x200, // Program counter starts at 0x200
-        draw_flag : false,
     }
 }
 
@@ -84,30 +82,33 @@ impl Chip8
 
     pub fn emulate(&mut self)
     {
+        //println!("PC : {}", self.pc);
         //Fetch
         self.opcode = (self.memory[self.pc as usize] as u16) << 8 | (self.memory[(self.pc+1) as usize] as u16); 
         self.pc = self.pc + 2;
         
         //Decode
-        let op = self.opcode & 0xF000 >> 12; 
-        let x = self.opcode & 0x0F00 >> 8;
-        let y = self.opcode & 0x00F0 >> 4;
-        let n = self.opcode & 0x000F >> 0;
+        let op = (self.opcode & 0xF000) >> 12; 
+        let x = (self.opcode & 0x0F00) >> 8;
+        let y = (self.opcode & 0x00F0) >> 4;
+        let n = self.opcode & 0x000F;
         let nn = self.opcode & 0x00FF;
         let nnn = self.opcode & 0x0FFF;
+        
+        //println!("opcode : 0x{:04x}", self.opcode);
 
         match op
         {
             0x0 => 
             {
                 //Clear Screen
-                self.draw_flag = true;
                 self.clear_display();
             }
             0x1 =>
             {   
                 //Jump
                 self.pc = nnn;
+
             }
             0x6 =>
             {
@@ -131,23 +132,23 @@ impl Chip8
                 let y_pos = self.v[y as usize] % 32;    //Get y coordinate
                 self.v[15] = 0;                         //Clear Register v[f]
 
-                for y in 0..n 
+                for y_off in 0..n 
                 {
-                    let pixel = self.memory[self.index_reg as usize + y as usize];
-                    for x in 0..8
+                    let pixel = self.memory[self.index_reg as usize + y_off as usize];
+                    for x_off in 0..8 as u16
                     {
-                        if pixel & (0x80 >> x) != 0 //If x in pixel is On
+                        if pixel & (0x80 >> x_off) != 0 //If x in pixel is On
                         {
-                            if self.display[(x_pos + x + (y_pos + y as u8) * 64) as usize] == 1
+                            if self.display[(x_pos as u16 + x_off + (y_pos as u16 + y_off) * 64) as usize] == 1
                             {
                                 self.v[15] = 1;
                             }
-                            self.display[(x_pos + x + (y_pos + y as u8) * 64) as usize] ^= 1; //Xor the pixel
+                            self.display[(x_pos as u16 + x_off + (y_pos as u16 + y_off) * 64) as usize] ^= 1; //Xor the pixel
                         }  
                     }
                 }
             }
-            _ => println!("Unknown OPCODE {}", self.opcode),
+            _ => println!("Unknown OPCODE 0x{:04x}", self.opcode),
         }
     }
 

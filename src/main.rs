@@ -20,17 +20,31 @@ fn main()
     
     ch_8.store_font(); //Store the custom font in the memory
 
-    ch_8.load_rom("roms/pong.ch8");
+    ch_8.load_rom("roms/IBM_Logo.ch8");
 
-    while !rl.window_should_close() {
+    while !rl.window_should_close()
+    {
         let mut d = rl.begin_drawing(&thread);
+        
+        d.clear_background(Color::BLACK);
 
         //EMULATE
         ch_8.emulate();
 
         //DRAW
-        d.clear_background(Color::WHITE);
+        for i in 0..ch_8.display.len() as i32
+        {
+            if ch_8.display[i as usize] != 0
+            {
+                d.draw_pixel(i%64, i/64, Color::WHITE);
+            }
+            else
+            {
+                d.draw_pixel(i%64, i/64, Color::BLACK);
+            }
+        }
 
         //Get Key press
-    }
+
+    } 
 }

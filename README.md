@@ -2,7 +2,7 @@
 A basic Chip-8 interpreter to learn how a emulator works.
 
 # Example
-![Example](assets/ibm_logo.png)
+![Example](assets/ibm_logo.PNG)
 
 *My chip-8 interpreter executing a simple IBM logo showing rom.*
 

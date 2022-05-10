@@ -110,6 +110,13 @@ impl Chip8
                 self.pc = nnn;
 
             }
+            0x2 =>
+            {
+                //Subroutines
+                self.stack.push(self.pc);
+                self.sp += 1
+                self.pc = nnn;
+            }
             0x6 =>
             {
                 //Set register vx

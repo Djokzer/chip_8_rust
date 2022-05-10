@@ -101,14 +101,21 @@ impl Chip8
         {
             0x0 => 
             {
-                //Clear Screen
-                self.clear_display();
+                if self.opcode == 0x00E0
+                {
+                    //Clear Screen
+                    self.clear_display();
+                }
+                else if self.opcode == 0x00EE
+                {
+                    self.pc = self.stack.pop().unwrap();
+                    self.sp -= 1;
+                }
             }
             0x1 =>
             {   
                 //Jump
                 self.pc = nnn;
-
             }
             0x2 =>
             {

@@ -13,7 +13,7 @@ fn main()
 
     let (mut rl, thread) = raylib::init()
         .size(SCREEN_WIDTH, SCREEN_HEIGTH)
-        .title("chip 8 rs")
+        .title("chip_8 rust")
         .build();
 
     let mut ch_8 = chip_8::init_ch8(); //Init the chip8

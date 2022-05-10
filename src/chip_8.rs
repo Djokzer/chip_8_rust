@@ -130,6 +130,22 @@ impl Chip8
                 let x_pos = self.v[x as usize] % 64;    //Get x coordinate
                 let y_pos = self.v[y as usize] % 32;    //Get y coordinate
                 self.v[15] = 0;                         //Clear Register v[f]
+
+                for y in 0..n 
+                {
+                    let pixel = self.memory[self.index_reg as usize + y as usize];
+                    for x in 0..8
+                    {
+                        if pixel & (0x80 >> x) != 0 //If x in pixel is On
+                        {
+                            if self.display[(x_pos + x + (y_pos + y as u8) * 64) as usize] == 1
+                            {
+                                self.v[15] = 1;
+                            }
+                            self.display[(x_pos + x + (y_pos + y as u8) * 64) as usize] ^= 1; //Xor the pixel
+                        }  
+                    }
+                }
             }
             _ => println!("Unknown OPCODE {}", self.opcode),
         }

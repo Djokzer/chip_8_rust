@@ -114,7 +114,7 @@ impl Chip8
             {
                 //Subroutines
                 self.stack.push(self.pc);
-                self.sp += 1
+                self.sp += 1;
                 self.pc = nnn;
             }
             0x6 =>

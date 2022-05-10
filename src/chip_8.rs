@@ -108,6 +108,7 @@ impl Chip8
                 }
                 else if self.opcode == 0x00EE
                 {
+                    //Return from subroutines
                     self.pc = self.stack.pop().unwrap();
                     self.sp -= 1;
                 }
@@ -124,6 +125,30 @@ impl Chip8
                 self.sp += 1;
                 self.pc = nnn;
             }
+            0x3 =>
+            {
+                //Skip if v[x] == nn
+                if self.v[x as usize] == nn as u8
+                {
+                    self.pc += 2;
+                }
+            }
+            0x4 =>
+            {
+                //Skip if v[x] != nn
+                if self.v[x as usize] != nn as u8
+                {
+                    self.pc += 2;
+                }
+            }
+            0x5 =>
+            {
+                //Skip if v[x] == v[y]
+                if self.v[x as usize] == self.v[y as usize]
+                {
+                    self.pc += 2;
+                }
+            }
             0x6 =>
             {
                 //Set register vx
@@ -133,6 +158,14 @@ impl Chip8
             {
                 //Add value to registe vx
                 self.v[x as usize] += nn as u8;
+            }
+            0x9 =>
+            {
+                //Skip if v[x] != v[y]
+                if self.v[x as usize] != self.v[y as usize]
+                {
+                    self.pc += 2;
+                }
             }
             0xA =>
             {

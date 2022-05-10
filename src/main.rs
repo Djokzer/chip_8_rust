@@ -36,15 +36,20 @@ fn main()
         {
             if ch_8.display[i as usize] != 0
             {
-                d.draw_pixel(i%64, i/64, Color::WHITE);
+                draw_bigger_pixel(&mut d, i%64, i/64, MULTIPLIER, Color::WHITE);
             }
             else
             {
-                d.draw_pixel(i%64, i/64, Color::BLACK);
+                draw_bigger_pixel(&mut d, i%64, i/64, MULTIPLIER, Color::BLACK);
             }
         }
 
         //Get Key press
 
     } 
+}
+
+fn draw_bigger_pixel(h : &mut RaylibDrawHandle, x : i32, y : i32, mult : i32, color : Color)
+{
+    h.draw_rectangle(x * mult, y * mult, mult, mult, color);
 }

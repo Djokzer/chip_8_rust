@@ -161,6 +161,97 @@ impl Chip8
                 temp += nn;
                 self.v[x as usize] = (temp % 256) as u8;
             }
+            0x8 =>
+            {
+                match self.opcode & 0x800F
+                {
+                    //Logical and arithmetic instructions
+                    0x8000 =>
+                    {
+                        //Set
+                        self.v[x as usize] = self.v[y as usize];
+                    }
+                    0x8001 =>
+                    {
+                        //Binary OR
+                        self.v[x as usize] |= self.v[y as usize];
+                    }
+                    0x8002 =>
+                    {
+                        //Binary AND
+                        self.v[x as usize] &= self.v[y as usize];
+                    }
+                    0x8003 =>
+                    {
+                        //Logical XOR
+                        self.v[x as usize] ^= self.v[y as usize];
+                    }
+                    0x8004 =>
+                    {
+                        //ADD
+                        let mut temp : u16 = self.v[x as usize] as u16;
+                        temp += self.v[y as usize] as u16;
+
+                        if temp > 255{self.v[15] = 1;} //Set carry flag
+                        else{self.v[15] = 0;}
+
+                        self.v[x as usize] = (temp % 256) as u8;
+                    }
+                    0x8005 =>
+                    {
+                        //SUBSTRACT vx = vx - vy
+                        let mut tmp : i32 = self.v[x as usize] as i32 - self.v[y as usize] as i32;
+
+                        if self.v[x as usize] > self.v[y as usize]
+                        {
+                            self.v[15] = 1; //Set carry flag
+                        }
+                        else
+                        {
+                            self.v[15] = 0;
+                            tmp += 256; //To get a positive value 
+                        }
+                        
+                        self.v[x as usize] = tmp as u8;
+                    }
+                    0x8007 =>
+                    {
+                        //SUBSTRACT vx = vy - vx
+                        let mut tmp : i32 = self.v[y as usize] as i32 - self.v[x as usize] as i32;
+
+                        if self.v[y as usize] > self.v[x as usize]
+                        {
+                            self.v[15] = 1; //Set carry flag
+                        }
+                        else
+                        {
+                            self.v[15] = 0;
+                            tmp += 256; //To get a positive value 
+                        }
+                        
+                        self.v[x as usize] = tmp as u8;
+                    }
+                    0x8006 =>
+                    {
+                        //SHIFT RIGHT vx = vy >> 1
+                        self.v[x as usize] = self.v[y as usize];
+                        
+                        self.v[15] = self.v[x as usize] & 0x01; //Vf = shfted out bit
+                        
+                        self.v[x as usize] = self.v[x as usize] >> 1;
+                    }
+                    0x800E =>
+                    {
+                        //SHIFT LEFT vx = vy << 1
+                        self.v[x as usize] = self.v[y as usize];
+                        
+                        self.v[15] = self.v[x as usize] & 0x80; //Vf = shfted out bit
+                        
+                        self.v[x as usize] = self.v[x as usize] << 1;
+                    }
+                    _=> println!("Unknown OPCODE 0x{:04x}", self.opcode),
+                }
+            }
             0x9 =>
             {
                 //Skip if v[x] != v[y]

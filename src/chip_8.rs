@@ -157,7 +157,9 @@ impl Chip8
             0x7 =>
             {
                 //Add value to registe vx
-                self.v[x as usize] += nn as u8;
+                let mut temp : u16 = self.v[x as usize] as u16;
+                temp += nn;
+                self.v[x as usize] = (temp % 256) as u8;
             }
             0x9 =>
             {

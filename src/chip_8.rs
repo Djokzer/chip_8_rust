@@ -2,6 +2,7 @@
 use std::fs::*;
 use std::fs::File;
 use std::io::Read;
+use raylib::prelude::*;
 
 //Font sprites
 const CH8_FONT : [u8; 80] = [
@@ -268,6 +269,11 @@ impl Chip8
             0xB =>
             {
                 self.pc = nnn + self.v[0] as u16;
+            }
+            0xC =>
+            {
+                let rng : i32 = get_random_value(0, 255);
+                self.v[x as usize] = rng as u8 & nn as u8;
             }
             0xD =>
             {

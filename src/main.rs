@@ -30,6 +30,8 @@ fn main()
 
     let mut ch_8 = chip_8::init_ch8(); //Init the chip8
 
+    let mut time : f32 = 0.0;
+
     while !rl.window_should_close()
     {
         let mut d = rl.begin_drawing(&thread);
@@ -38,7 +40,6 @@ fn main()
         if main_menu
         {
             //MAIN MENU
-
             let text_width : i32 = measure_text(&paths[rom_counter], 40);
             d.draw_text(&paths[rom_counter], SCREEN_WIDTH/2 - (text_width/2), SCREEN_HEIGTH / 2 - 20, 40,Color::WHITE);
             draw_arrow(&mut d, SCREEN_WIDTH, SCREEN_HEIGTH, Color::WHITE);
@@ -70,6 +71,14 @@ fn main()
 
             //EMULATE
             ch_8.emulate();
+
+            //UPDATE TIMERS (60 HZ)
+            time += d.get_frame_time();
+            if time >= 0.016
+            {
+                ch_8.update_timer();
+                time = 0.0;
+            }
 
             //DRAW
             for i in 0..ch_8.display.len() as i32

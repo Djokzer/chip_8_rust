@@ -323,6 +323,20 @@ impl Chip8
         }
     }
 
+    pub fn update_timer(&mut self)
+    {
+        if self.delay_timer > 0
+        {
+            self.delay_timer -= 1;
+        }
+
+        if self.sound_timer > 0
+        {
+            self.sound_timer -= 1;
+            println!("BIIIIIP!!!!");
+        }
+    }
+
     pub fn clear_display(&mut self)
     {
         for i in 0..self.display.len() 

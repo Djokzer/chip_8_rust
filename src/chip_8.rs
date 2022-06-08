@@ -374,7 +374,14 @@ impl Chip8
                         self.memory[(self.index_reg + 1) as usize] = (self.v[x as usize] / 10) % 10;
                         self.memory[(self.index_reg + 2) as usize] = self.v[x as usize] % 10;
                     }
-                    
+                    0xF055 =>
+                    {
+                        //STORE IN MEMORY
+                        for i in 0..self.v.len()
+                        {
+                            self.memory[self.index_reg as usize + i] = self.v[i];
+                        }
+                    }
                     _=> println!("Unknown OPCODE 0x{:04x}", self.opcode),
                 }
             }

@@ -362,6 +362,19 @@ impl Chip8
                             self.pc -= 2;
                         }
                     }
+                    0xF029 =>
+                    {
+                        //FONT CHARACTER
+                        self.index_reg = self.v[x as usize] as u16 * 5; //FONT 16X5
+                    }
+                    0xF033 =>
+                    {
+                        //BINARY CODED DECIMAL CONVERSION
+                        self.memory[self.index_reg as usize] = (self.v[x as usize] / 100) % 10;
+                        self.memory[(self.index_reg + 1) as usize] = (self.v[x as usize] / 10) % 10;
+                        self.memory[(self.index_reg + 2) as usize] = self.v[x as usize] % 10;
+                    }
+                    
                     _=> println!("Unknown OPCODE 0x{:04x}", self.opcode),
                 }
             }

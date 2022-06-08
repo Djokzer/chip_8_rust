@@ -265,6 +265,10 @@ impl Chip8
                 //Set the index register to NNN
                 self.index_reg = nnn;
             }
+            0xB =>
+            {
+                self.pc = nnn + self.v[0] as u16;
+            }
             0xD =>
             {
                 //Draw in the display

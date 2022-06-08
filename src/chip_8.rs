@@ -298,6 +298,27 @@ impl Chip8
                     }
                 }
             }
+            0xE =>
+            {
+                match self.opcode & 0xE0FF
+                {
+                    0xE09E =>
+                    {
+                        if self.input[self.v[x as usize] as usize] != 0     //Skip if pressed
+                        {
+                            self.pc += 2;
+                        }
+                    }
+                    0xE0A1 =>
+                    {
+                        if self.input[self.v[x as usize] as usize] == 0     //Skip if not pressed
+                        {
+                            self.pc += 2;
+                        }
+                    }
+                    _ => println!("Unknown OPCODE 0x{:04x}", self.opcode),
+                }
+            }
             _ => println!("Unknown OPCODE 0x{:04x}", self.opcode),
         }
     }

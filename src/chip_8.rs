@@ -319,6 +319,52 @@ impl Chip8
                     _ => println!("Unknown OPCODE 0x{:04x}", self.opcode),
                 }
             }
+            0xF =>
+            {
+                match self.opcode & 0xF0FF
+                {
+                    0xF007 =>
+                    {
+                        //STORE DELAY TIMER VALUE
+                        self.v[x as usize] = self.delay_timer;
+                    }
+                    0xF015 =>
+                    {
+                        //SET DELAY TIMER
+                        self.delay_timer = self.v[x as usize];
+                    }
+                    0xF018 =>
+                    {
+                        //SET SOUND TIMER
+                        self.sound_timer = self.v[x as usize];
+                    }
+                    0xF01E =>
+                    {
+                        //ADD TO INDEX
+                        self.index_reg += self.v[x as usize] as u16;
+                    }
+                    0xF00A =>
+                    {
+                        //GET KEY
+                        let mut is_key_pressed : bool = false;
+
+                        for i in 0..self.input.len()
+                        {
+                            if self.input[i] != 0
+                            {
+                                is_key_pressed = true;
+                                self.v[x as usize] = i as u8;
+                            }
+                        }
+
+                        if !is_key_pressed
+                        {
+                            self.pc -= 2;
+                        }
+                    }
+                    _=> println!("Unknown OPCODE 0x{:04x}", self.opcode),
+                }
+            }
             _ => println!("Unknown OPCODE 0x{:04x}", self.opcode),
         }
     }

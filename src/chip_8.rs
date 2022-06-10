@@ -289,6 +289,10 @@ impl Chip8
                     {
                         if pixel & (0x80 >> x_off) != 0 //If x in pixel is On
                         {
+                            if (x_pos as u16 + x_off + (y_pos as u16 + y_off) * 64) >= 2048
+                            {
+                                break;
+                            }
                             if self.display[(x_pos as u16 + x_off + (y_pos as u16 + y_off) * 64) as usize] == 1
                             {
                                 self.v[15] = 1;

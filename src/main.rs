@@ -69,13 +69,19 @@ fn main()
         {
             //EMULATION
 
-            //EMULATE
-            ch_8.emulate();
+            //Get Key press for emulation
 
-            //UPDATE TIMERS (60 HZ)
+            
+            //GET TIME
             time += d.get_frame_time();
+            
+            //60 HZ Frequency
             if time >= 0.016
             {
+                 //EMULATE
+                ch_8.emulate();
+
+                //UPDATE THE TIMERS
                 ch_8.update_timer();
                 time = 0.0;
             }
@@ -92,8 +98,6 @@ fn main()
                     draw_bigger_pixel(&mut d, i%64, i/64, MULTIPLIER, Color::BLACK);
                 }
             }
-
-            //Get Key press for emulation
         }
     } 
 }

@@ -377,9 +377,17 @@ impl Chip8
                     0xF055 =>
                     {
                         //STORE IN MEMORY
-                        for i in 0..self.v.len()
+                        for i in 0..=x
                         {
-                            self.memory[self.index_reg as usize + i] = self.v[i];
+                            self.memory[(self.index_reg + i) as usize] = self.v[i as usize];
+                        }
+                    }
+                    0xF065 =>
+                    {
+                        //LOAD THE MEMORY
+                        for i in 0..=x
+                        {
+                            self.v[i as usize] = self.memory[(self.index_reg + i) as usize];
                         }
                     }
                     _=> println!("Unknown OPCODE 0x{:04x}", self.opcode),

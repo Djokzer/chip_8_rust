@@ -58,6 +58,7 @@ fn main()
             {
                 //EMULATION CYCLE
                 ch_8.emulate();
+                clk = 0.0;
             }
 
             //60 HZ TIMER UPDATE

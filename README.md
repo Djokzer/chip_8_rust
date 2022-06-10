@@ -2,9 +2,15 @@
 A basic Chip-8 interpreter to learn how a emulator works.
 
 # Example
-![Example](assets/ibm_logo.PNG)
-
 *My chip-8 interpreter executing a simple IBM logo showing rom.*
+
+![IBM](assets/ibm_logo.PNG)
+
+*The Pong Game*
+
+![PONG](assets/Pong.PNG)
+
+
 
 ## Resources
 - [Guide to make a chip-8 emulator without code](https://tobiasvl.github.io/blog/write-a-chip-8-emulator/)

@@ -83,7 +83,7 @@ fn main()
             }
 
             //60 HZ TIMER UPDATE
-            if timer_clk >= 0.016 
+            if timer_clk >= 0.016
             {
                 //UPDATE THE TIMERS
                 ch_8.update_timer();

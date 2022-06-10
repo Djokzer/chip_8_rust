@@ -9,62 +9,40 @@ const HEIGTH : i32 = 32;
 
 fn main() 
 {
-    let mut main_menu : bool = true;
-
-    let paths = fs::read_dir("roms/")
-    .unwrap()
-    .filter_map(|e| e.ok())
-    .map(|e| e.path().to_string_lossy().into_owned())
-    .collect::<Vec<_>>();
-
-    let mut rom_counter = 0;
-
+    //WINDOW
     const MULTIPLIER : i32 = 10;
     const SCREEN_WIDTH : i32 = WIDTH * MULTIPLIER; 
     const SCREEN_HEIGTH : i32 = HEIGTH * MULTIPLIER ; 
 
     let (mut rl, thread) = raylib::init()
-        .size(SCREEN_WIDTH, SCREEN_HEIGTH)
-        .title("chip_8 rust")
-        .build();
+    .size(SCREEN_WIDTH, SCREEN_HEIGTH)
+    .title("chip_8 rust")
+    .build();
 
+    //MAIN MENU
+    let mut rom_choosed : bool = false;
+    let paths = fs::read_dir("roms/")
+    .unwrap()
+    .filter_map(|e| e.ok())
+    .map(|e| e.path().to_string_lossy().into_owned())
+    .collect::<Vec<_>>();
+    let mut rom_counter = 0;
+
+    //CHIP-8
     let mut ch_8 = chip_8::init_ch8(); //Init the chip8
-
     let mut clk : f32 = 0.0;
     let mut timer_clk : f32 = 0.0;
 
+    //MAIN LOOP
     while !rl.window_should_close()
     {
         let mut d = rl.begin_drawing(&thread);
         d.clear_background(Color::get_color(0x2d3436)); //
 
-        if main_menu
+        if !rom_choosed
         {
             //MAIN MENU
-            let text_width : i32 = measure_text(&paths[rom_counter], 40);
-            d.draw_text(&paths[rom_counter], SCREEN_WIDTH/2 - (text_width/2), SCREEN_HEIGTH / 2 - 20, 40,Color::WHITE);
-            draw_arrow(&mut d, SCREEN_WIDTH, SCREEN_HEIGTH, Color::WHITE);
-
-            if d.is_key_pressed(KEY_ENTER)
-            {
-                ch_8.store_font(); //Store the custom font in the memory
-                ch_8.load_rom(&paths[rom_counter]);
-                main_menu = false;
-            }
-            else if d.is_key_pressed(KEY_RIGHT)
-            {
-                if paths.len() - 1 > rom_counter
-                {
-                    rom_counter+=1;
-                }
-            }
-            else if d.is_key_pressed(KEY_LEFT)
-            {
-                if 0 < rom_counter
-                {
-                    rom_counter-=1;
-                }
-            }
+            main_menu(&mut d, SCREEN_WIDTH, SCREEN_HEIGTH, &mut ch_8, &paths, &mut rom_counter, &mut rom_choosed);
         }
         else
         {
@@ -104,6 +82,36 @@ fn main()
             }
         }
     } 
+}
+
+fn main_menu(h : &mut RaylibDrawHandle, screen_width : i32, screen_height : i32, ch_8 : &mut chip_8::Chip8, path : &Vec<String>, rom_counter : &mut usize, rom_choosed : &mut bool)
+{
+    //DRAW MAIN MENU
+    let text_width : i32 = measure_text(&path[*rom_counter], 40);
+    h.draw_text(&path[*rom_counter], screen_width/2 - (text_width/2), screen_height / 2 - 20, 40,Color::WHITE);
+    draw_arrow(h, screen_width, screen_height, Color::WHITE);
+
+    //CHOOSE ROM
+    if h.is_key_pressed(KEY_ENTER)
+    {
+                ch_8.store_font(); //Store the custom font in the memory
+                ch_8.load_rom(&path[*rom_counter]);
+                *rom_choosed = true;
+    }
+    else if h.is_key_pressed(KEY_RIGHT)
+    {
+        if path.len() - 1 > *rom_counter
+        {
+            *rom_counter+=1;
+        }
+    }
+    else if h.is_key_pressed(KEY_LEFT)
+    {
+        if 0 < *rom_counter
+        {
+            *rom_counter-=1;
+        }
+    }
 }
 
 fn draw_bigger_pixel(h : &mut RaylibDrawHandle, x : i32, y : i32, mult : i32, color : Color)

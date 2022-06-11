@@ -2,10 +2,10 @@
 A basic Chip-8 interpreter to learn how an emulator works.
 
 # Dependancies
+- Cargo
 - Cmake
 
 # Commands
-
 ```Bash
 cargo run
 ```

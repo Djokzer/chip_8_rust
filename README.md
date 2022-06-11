@@ -5,10 +5,9 @@ A basic Chip-8 interpreter to learn how an emulator works.
 - Cmake
 
 # Commands
-´´´Bash
 
+```Bash
 cargo run
-
 ```
 
 # Example

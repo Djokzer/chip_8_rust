@@ -7,7 +7,7 @@ A basic Chip-8 interpreter to learn how an emulator works.
 # Commands
 ´´´Bash
 cargo run
-´´´
+```
 
 # Example
 *My chip-8 interpreter executing a simple IBM logo showing rom.*

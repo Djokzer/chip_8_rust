@@ -1,5 +1,5 @@
 # Chip-8 interpreter in RUST
-A basic Chip-8 interpreter to learn how a emulator works.
+A basic Chip-8 interpreter to learn how an emulator works.
 
 # Example
 *My chip-8 interpreter executing a simple IBM logo showing rom.*

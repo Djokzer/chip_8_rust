@@ -1,6 +1,14 @@
 # Chip-8 interpreter in RUST
 A basic Chip-8 interpreter to learn how an emulator works.
 
+# Dependancies
+- Cmake
+
+# Commands
+´´´Bash
+cargo run
+´´´
+
 # Example
 *My chip-8 interpreter executing a simple IBM logo showing rom.*
 

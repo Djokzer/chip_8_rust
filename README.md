@@ -6,7 +6,9 @@ A basic Chip-8 interpreter to learn how an emulator works.
 
 # Commands
 ´´´Bash
+
 cargo run
+
 ```
 
 # Example

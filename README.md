@@ -5,7 +5,7 @@ A basic Chip-8 interpreter to learn how an emulator works.
 - [Cargo](https://www.rust-lang.org/tools/install)
 - [Cmake](https://cmake.org/download/)
 
-# Commands
+# Build and Run
 ```Bash
 cargo run
 ```

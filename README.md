@@ -2,8 +2,8 @@
 A basic Chip-8 interpreter to learn how an emulator works.
 
 # Dependancies
-- Cargo
-- Cmake
+- [Cargo](https://www.rust-lang.org/tools/install)
+- [Cmake](https://cmake.org/download/)
 
 # Commands
 ```Bash
